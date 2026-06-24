@@ -1,981 +1,250 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-PT">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VidFlow AI — Vídeos IA de 10 Segundos</title>
 
-  <title>Tribunal da Cadeira</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 
   <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
     body {
-      font-family: Georgia, "Times New Roman", serif;
+      background: #070A12;
+      color: white;
+      font-family: Inter, system-ui, sans-serif;
+    }
+
+    .glass {
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.14);
+      backdrop-filter: blur(18px);
+    }
+
+    .glow {
+      box-shadow: 0 0 90px rgba(99,102,241,0.45);
+    }
+
+    .gradient-text {
+      background: linear-gradient(90deg, #8b5cf6, #22d3ee, #f472b6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .video-box {
       background:
-        radial-gradient(circle at top, rgba(120, 72, 22, 0.25), transparent 35%),
-        radial-gradient(circle at bottom, rgba(80, 0, 0, 0.25), transparent 35%),
-        #050505;
-      color: #ead8ad;
-      min-height: 100vh;
-    }
-
-    .app {
-      display: grid;
-      grid-template-columns: 230px 1fr 320px;
-      min-height: 100vh;
-    }
-
-    aside {
-      border-right: 1px solid rgba(198, 145, 68, 0.35);
-      background: rgba(0, 0, 0, 0.55);
-      padding: 28px 20px;
-      position: sticky;
-      top: 0;
-      height: 100vh;
-    }
-
-    .seal {
-      width: 130px;
-      height: 130px;
-      border: 2px solid #9d6b31;
-      border-radius: 50%;
-      margin: 0 auto 35px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      color: #c49a54;
-      font-size: 15px;
-      letter-spacing: 1px;
-      box-shadow: 0 0 25px rgba(180, 110, 30, 0.25);
-    }
-
-    nav a {
-      display: block;
-      padding: 15px 12px;
-      margin-bottom: 8px;
-      color: #d8bd82;
-      text-decoration: none;
-      border: 1px solid transparent;
-      cursor: pointer;
-      font-size: 18px;
-    }
-
-    nav a.active,
-    nav a:hover {
-      background: rgba(120, 20, 15, 0.55);
-      border-color: rgba(190, 113, 46, 0.55);
-      color: #fff1c7;
-    }
-
-    .quote {
-      margin-top: 60px;
-      font-style: italic;
-      text-align: center;
-      color: #c8a96d;
-      line-height: 1.5;
-    }
-
-    main {
-      padding: 28px;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 30px;
-      border-bottom: 1px solid rgba(198, 145, 68, 0.35);
-      padding-bottom: 25px;
-    }
-
-    h1 {
-      font-size: clamp(42px, 7vw, 86px);
-      color: #e8d7b3;
-      letter-spacing: 4px;
-      text-transform: uppercase;
-      text-shadow: 0 0 25px rgba(255, 198, 91, 0.2);
-    }
-
-    .subtitle {
-      color: #c54d34;
-      font-size: 22px;
-      margin-top: 8px;
-      letter-spacing: 2px;
-    }
-
-    .counter {
-      margin-top: 14px;
-      color: #f2d38b;
-      font-size: 18px;
-    }
-
-    .section {
-      display: none;
-    }
-
-    .section.active {
-      display: block;
-    }
-
-    .hero {
-      border: 1px solid rgba(198, 145, 68, 0.45);
-      background: rgba(10, 10, 10, 0.72);
-      padding: 35px;
-      border-radius: 14px;
-      margin-bottom: 28px;
-      box-shadow: 0 0 35px rgba(0, 0, 0, 0.55);
-      text-align: center;
-    }
-
-    .chair {
-      font-size: 95px;
-      margin-bottom: 15px;
-      filter: drop-shadow(0 0 15px rgba(255, 177, 72, 0.25));
-    }
-
-    .hero h2 {
-      font-size: 36px;
-      color: #f2d38b;
-      margin-bottom: 12px;
-    }
-
-    .hero p {
-      max-width: 720px;
-      margin: 0 auto 22px;
-      line-height: 1.6;
-      color: #d9c391;
-      font-size: 18px;
-    }
-
-    .btn {
-      background: linear-gradient(180deg, #8a1e14, #450b08);
-      color: #ffe5a4;
-      border: 1px solid #c69242;
-      padding: 14px 22px;
-      font-size: 17px;
-      font-family: inherit;
-      cursor: pointer;
-      border-radius: 8px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      box-shadow: 0 0 18px rgba(148, 30, 20, 0.35);
-    }
-
-    .btn:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.15);
-    }
-
-    .composer,
-    .card,
-    .ranking-card,
-    .book-card,
-    .profile-card {
-      border: 1px solid rgba(198, 145, 68, 0.42);
-      background: rgba(8, 8, 8, 0.82);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 18px;
-    }
-
-    .composer input,
-    .composer textarea,
-    .composer select {
-      width: 100%;
-      background: #080808;
-      color: #ead8ad;
-      border: 1px solid rgba(198, 145, 68, 0.55);
-      padding: 14px;
-      margin-bottom: 14px;
-      border-radius: 8px;
-      font-family: inherit;
-      font-size: 16px;
-    }
-
-    .composer textarea {
-      min-height: 120px;
-      resize: vertical;
-    }
-
-    .warning {
-      border: 1px solid rgba(200, 70, 45, 0.7);
-      background: rgba(100, 15, 10, 0.35);
-      color: #ffd7a0;
-      padding: 14px;
-      border-radius: 8px;
-      margin-bottom: 14px;
-      line-height: 1.5;
-    }
-
-    .card {
-      display: grid;
-      grid-template-columns: 100px 1fr 170px;
-      gap: 18px;
-      align-items: center;
-    }
-
-    .object {
-      width: 100px;
-      height: 100px;
-      border-radius: 14px;
-      border: 1px solid rgba(198, 145, 68, 0.35);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 54px;
-      background: radial-gradient(circle, rgba(174, 101, 28, 0.25), #080808);
-    }
-
-    .card h3 {
-      color: #f2d38b;
-      font-size: 25px;
-      margin-bottom: 5px;
-    }
-
-    .meta {
-      color: #9f865b;
-      font-size: 14px;
-      margin-bottom: 8px;
-    }
-
-    .card p {
-      line-height: 1.5;
-      color: #d9c391;
-    }
-
-    .verdict {
-      border: 2px solid #a33a2b;
-      color: #e44835;
-      padding: 10px;
-      text-align: center;
-      font-size: 22px;
-      text-transform: uppercase;
-      transform: rotate(-5deg);
-      font-weight: bold;
-      letter-spacing: 2px;
-    }
-
-    .actions {
-      grid-column: 2 / 4;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 8px;
-    }
-
-    .action {
-      background: rgba(255, 255, 255, 0.03);
-      color: #d8bd82;
-      border: 1px solid rgba(198, 145, 68, 0.35);
-      padding: 8px 12px;
-      border-radius: 7px;
-      cursor: pointer;
-      font-family: inherit;
-    }
-
-    .action:hover {
-      background: rgba(120, 20, 15, 0.45);
-    }
-
-    .right-panel {
-      padding: 28px 20px;
-      border-left: 1px solid rgba(198, 145, 68, 0.35);
-      background: rgba(0, 0, 0, 0.55);
-    }
-
-    .side-box {
-      border: 1px solid rgba(198, 145, 68, 0.42);
-      padding: 18px;
-      border-radius: 12px;
-      margin-bottom: 18px;
-      background: rgba(8, 8, 8, 0.82);
-    }
-
-    .side-box h3 {
-      color: #f2d38b;
-      margin-bottom: 12px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    .side-box p,
-    .side-box li {
-      color: #d9c391;
-      line-height: 1.5;
-      margin-bottom: 8px;
-    }
-
-    ul {
-      padding-left: 18px;
-    }
-
-    .ranking-item {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid rgba(198, 145, 68, 0.25);
-      padding: 10px 0;
-    }
-
-    .book-cover {
-      width: 170px;
-      height: 240px;
-      margin: 0 auto 20px;
-      border: 2px solid #9d6b31;
-      background:
-        radial-gradient(circle at top, rgba(122, 39, 20, 0.5), transparent 45%),
-        #111;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 15px;
-      color: #f2d38b;
-      font-size: 24px;
-      text-transform: uppercase;
-      box-shadow: 0 0 35px rgba(0, 0, 0, 0.8);
-    }
-
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .mini {
-      border: 1px solid rgba(198, 145, 68, 0.35);
-      padding: 20px;
-      border-radius: 12px;
-      background: rgba(8, 8, 8, 0.82);
-      text-align: center;
-    }
-
-    .mini span {
-      display: block;
-      font-size: 42px;
-      margin-bottom: 10px;
-    }
-
-    .mini h3 {
-      color: #f2d38b;
-      margin-bottom: 8px;
-    }
-
-    .profile-card h2 {
-      color: #f2d38b;
-      margin-bottom: 12px;
-    }
-
-    .profile-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-top: 16px;
-    }
-
-    .stat {
-      border: 1px solid rgba(198, 145, 68, 0.35);
-      border-radius: 10px;
-      padding: 14px;
-      text-align: center;
-      background: rgba(255, 255, 255, 0.03);
-    }
-
-    .stat strong {
-      display: block;
-      font-size: 24px;
-      color: #f2d38b;
-    }
-
-    footer {
-      text-align: center;
-      padding: 18px;
-      color: #8e744b;
-      border-top: 1px solid rgba(198, 145, 68, 0.25);
-      margin-top: 30px;
-    }
-
-    @media (max-width: 1100px) {
-      .app {
-        grid-template-columns: 1fr;
-      }
-
-      aside,
-      .right-panel {
-        position: static;
-        height: auto;
-        border: none;
-      }
-
-      nav {
-        display: flex;
-        overflow-x: auto;
-        gap: 8px;
-      }
-
-      nav a {
-        min-width: 120px;
-        text-align: center;
-      }
-
-      .quote {
-        display: none;
-      }
-
-      .card {
-        grid-template-columns: 80px 1fr;
-      }
-
-      .object {
-        width: 80px;
-        height: 80px;
-        font-size: 42px;
-      }
-
-      .verdict {
-        grid-column: 1 / 3;
-      }
-
-      .actions {
-        grid-column: 1 / 3;
-      }
-
-      .grid,
-      .profile-stats {
-        grid-template-columns: 1fr;
-      }
+        radial-gradient(circle at top, rgba(139,92,246,.35), transparent 40%),
+        linear-gradient(135deg, #111827, #020617);
     }
   </style>
 </head>
 
-<body>
-  <div class="app">
-    <aside>
-      <div class="seal">VEREDITO<br>FINAL</div>
+<body class="min-h-screen">
 
-      <nav>
-        <a class="active" onclick="showSection('feed', this)">Feed</a>
-        <a onclick="showSection('julgar', this)">Julgar</a>
-        <a onclick="showSection('ranking', this)">Ranking</a>
-        <a onclick="showSection('objetos', this)">Objetos</a>
-        <a onclick="showSection('perfil', this)">Perfil</a>
-        <a onclick="showSection('livro', this)">Livro</a>
-      </nav>
-
-      <div class="quote">
-        “Ela não tem boca.<br>
-        Mas o veredito ecoa<br>
-        no universo.”
-      </div>
-    </aside>
-
-    <main>
-      <header>
-        <h1>Tribunal da Cadeira</h1>
-        <div class="subtitle">Publica. Espera. Ela decide.</div>
-        <div class="counter" id="totalCounter">A carregar julgamentos...</div>
-      </header>
-
-      <section id="feed" class="section active">
-        <div class="hero">
-          <div class="chair">🪑</div>
-          <h2>A Cadeira Que Julga a Morte</h2>
-          <p>
-            Um tribunal cósmico onde objetos, memórias, segredos absurdos e situações impossíveis
-            são julgados por uma cadeira que nunca explica o veredito.
-          </p>
-          <button class="btn" onclick="goToCreate()">Submeter Julgamento</button>
-        </div>
-
-        <div id="feedList"></div>
-      </section>
-
-      <section id="julgar" class="section">
-        <div class="composer">
-          <h2>Criar Julgamento</h2>
-          <br>
-
-          <div class="warning">
-            Regra do Tribunal: não publiques nomes reais, dados pessoais, ataques a pessoas ou acusações reais.
-            A cadeira julga objetos, ideias, memórias fictícias e situações absurdas.
-          </div>
-
-          <input id="caseTitle" placeholder="Título do caso. Ex: A Banana Culpada">
-
-          <select id="caseCategory">
-            <option value="Objeto">Objeto</option>
-            <option value="Memória">Memória</option>
-            <option value="Segredo absurdo">Segredo absurdo</option>
-            <option value="Situação estranha">Situação estranha</option>
-            <option value="Filosófico">Filosófico</option>
-            <option value="Câmara da Morte">Câmara da Morte</option>
-          </select>
-
-          <textarea id="caseText" placeholder="O que queres que a cadeira julgue?"></textarea>
-
-          <button class="btn" onclick="createJudgment()">Julgar Agora</button>
-        </div>
-
-        <div id="result"></div>
-      </section>
-
-      <section id="ranking" class="section">
-        <div class="hero">
-          <h2>Ranking dos Absurdos</h2>
-          <p>Os julgamentos mais votados sobem ao topo. A justiça é duvidosa. A cadeira é definitiva.</p>
-        </div>
-
-        <div id="rankingList"></div>
-      </section>
-
-      <section id="objetos" class="section">
-        <div class="hero">
-          <h2>Objetos Julgáveis</h2>
-          <p>Começa por objetos simples. Quanto mais absurdo, melhor.</p>
-        </div>
-
-        <div class="grid">
-          <div class="mini"><span>🍌</span><h3>Banana</h3><p>Quase sempre culpada.</p></div>
-          <div class="mini"><span>⏰</span><h3>Relógio</h3><p>Mente ao tempo.</p></div>
-          <div class="mini"><span>🧦</span><h3>Meia</h3><p>Abandona a sua metade.</p></div>
-          <div class="mini"><span>☕</span><h3>Chávena</h3><p>Sabe demasiado.</p></div>
-          <div class="mini"><span>🧸</span><h3>Peluche</h3><p>Observa em silêncio.</p></div>
-          <div class="mini"><span>📖</span><h3>Livro</h3><p>Guarda verdades perigosas.</p></div>
-        </div>
-      </section>
-
-      <section id="perfil" class="section">
-        <div class="profile-card">
-          <h2>Perfil do Observador</h2>
-          <p>A cadeira viu-te entrar. Agora és parte do tribunal.</p>
-
-          <div class="profile-stats">
-            <div class="stat">
-              <strong id="profileJudgments">0</strong>
-              Julgamentos
-            </div>
-            <div class="stat">
-              <strong>1.876</strong>
-              Moedas
-            </div>
-            <div class="stat">
-              <strong>Nível 1</strong>
-              Observador
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="livro" class="section">
-        <div class="book-card">
-          <div class="book-cover">
-            A Cadeira<br>Que Julga<br>A Morte
-          </div>
-
-          <h2>O Livro Oficial</h2>
-          <br>
-          <p>
-            100 microcapítulos. 100 julgamentos absurdos.
-            Uma cadeira no centro do universo. Nenhum réu. Nenhuma testemunha.
-            Nenhuma justiça.
-          </p>
-          <br>
-          <p>
-            <strong>Frase de venda:</strong><br>
-            “Ela não tem boca. Mas o veredito ecoa no universo.”
-          </p>
-          <br>
-          <button class="btn">Em breve</button>
-        </div>
-      </section>
-
-      <footer>
-        © Tribunal da Cadeira — A verdade é relativa. O veredito é final.
-      </footer>
-    </main>
-
-    <div class="right-panel">
-      <div class="side-box">
-        <h3>Julgamento do Dia</h3>
-        <p><strong>Urso de Peluche</strong></p>
-        <p>Acusado de conforto excessivo e manipulação emocional.</p>
-        <p><strong>Veredito:</strong> SEM ALMA</p>
-      </div>
-
-      <div class="side-box">
-        <h3>Regras do Tribunal</h3>
-        <ul>
-          <li>Não julgamos pessoas reais.</li>
-          <li>O absurdo tem prioridade.</li>
-          <li>Recursos raramente são aceites.</li>
-          <li>A cadeira não explica o veredito.</li>
-        </ul>
-      </div>
-
-      <div class="side-box">
-        <h3>Moedas da Cadeira</h3>
-        <p>Saldo fictício: <strong>1.876</strong></p>
-        <p>Usa moedas para recorrer, destacar julgamentos ou mandar casos para o Abismo.</p>
-      </div>
+  <header class="px-6 py-5 flex justify-between items-center">
+    <div class="text-2xl font-black tracking-tight">
+      VidFlow<span class="gradient-text">AI</span>
     </div>
-  </div>
+
+    <button class="px-5 py-2 rounded-full bg-white text-black font-bold">
+      Entrar
+    </button>
+  </header>
+
+  <main class="px-6 py-10 max-w-7xl mx-auto">
+
+    <section class="text-center mb-14">
+      <div class="inline-flex px-4 py-2 rounded-full glass text-sm mb-6">
+        Vídeos IA curtos, rápidos e virais
+      </div>
+
+      <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6">
+        Cria vídeos com IA<br>
+        em apenas <span class="gradient-text">10 segundos</span>
+      </h1>
+
+      <p class="text-gray-300 text-lg max-w-2xl mx-auto">
+        Escreve um prompt, envia uma imagem e gera vídeos curtos para TikTok,
+        Reels, anúncios, produtos, ASMR, terror e storytelling.
+      </p>
+    </section>
+
+    <section class="grid lg:grid-cols-2 gap-8 items-start">
+
+      <div class="glass rounded-3xl p-6 glow">
+
+        <h2 class="text-2xl font-black mb-6">Criador de Vídeo</h2>
+
+        <label class="block mb-2 font-semibold">Prompt do vídeo</label>
+        <textarea id="prompt" rows="6"
+          placeholder="Ex: Uma mão gigante hiper-realista esmaga lentamente um cubo de gelo azul, som ASMR intenso, fundo escuro, loop perfeito..."
+          class="w-full rounded-2xl bg-black/40 border border-white/10 p-4 outline-none focus:border-purple-400 mb-5"></textarea>
+
+        <label class="block mb-2 font-semibold">Enviar imagem</label>
+        <input id="imageInput" type="file" accept="image/*"
+          class="w-full mb-5 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-purple-600 file:px-5 file:py-3 file:text-white file:font-bold" />
+
+        <div id="preview" class="hidden mb-5">
+          <img id="previewImg" class="rounded-2xl max-h-56 w-full object-cover border border-white/10" />
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-4 mb-5">
+          <div>
+            <label class="block mb-2 font-semibold">Estilo</label>
+            <select class="w-full rounded-2xl bg-black/40 border border-white/10 p-4">
+              <option>Cinematográfico</option>
+              <option>Viral TikTok</option>
+              <option>Produto Premium</option>
+              <option>ASMR</option>
+              <option>Terror</option>
+              <option>Anime</option>
+              <option>Ultra-realista</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block mb-2 font-semibold">Formato</label>
+            <select class="w-full rounded-2xl bg-black/40 border border-white/10 p-4">
+              <option>9:16 Vertical</option>
+              <option>16:9 Horizontal</option>
+              <option>1:1 Quadrado</option>
+            </select>
+          </div>
+        </div>
+
+        <button onclick="generateVideo()"
+          class="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-400 font-black text-lg">
+          Gerar vídeo de 10 segundos
+        </button>
+
+      </div>
+
+      <div class="glass rounded-3xl p-6">
+
+        <h2 class="text-2xl font-black mb-6">Resultado</h2>
+
+        <div class="video-box rounded-3xl h-[520px] flex flex-col items-center justify-center text-center p-6 border border-white/10">
+
+          <div id="emptyState">
+            <div class="text-6xl mb-4">🎬</div>
+            <h3 class="text-2xl font-black mb-2">O teu vídeo aparece aqui</h3>
+            <p class="text-gray-400">
+              Geração limitada a 10 segundos.
+            </p>
+          </div>
+
+          <div id="loadingState" class="hidden">
+            <div class="text-5xl mb-4 animate-pulse">⚡</div>
+            <h3 class="text-2xl font-black mb-2">A gerar vídeo...</h3>
+            <p class="text-gray-400 mb-4">Criando 10 segundos com IA</p>
+            <div class="w-64 h-3 bg-white/10 rounded-full overflow-hidden">
+              <div id="bar" class="h-full bg-purple-500 w-0"></div>
+            </div>
+          </div>
+
+          <div id="doneState" class="hidden">
+            <div class="text-6xl mb-4">✅</div>
+            <h3 class="text-2xl font-black mb-2">Vídeo pronto</h3>
+            <p class="text-gray-400 mb-6">
+              Pré-visualização simulada de vídeo IA com 10 segundos.
+            </p>
+
+            <div class="flex gap-3 justify-center flex-wrap">
+              <button class="px-5 py-3 rounded-full bg-white text-black font-bold">
+                Download
+              </button>
+              <button class="px-5 py-3 rounded-full glass font-bold">
+                Regerar
+              </button>
+              <button class="px-5 py-3 rounded-full glass font-bold">
+                Copiar Prompt
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="grid md:grid-cols-3 gap-6 mt-12">
+
+      <div class="glass rounded-3xl p-6">
+        <h3 class="text-xl font-black mb-2">Free</h3>
+        <p class="text-4xl font-black mb-4">0€</p>
+        <p class="text-gray-400 mb-4">3 vídeos grátis</p>
+        <button class="w-full py-3 rounded-xl bg-white text-black font-bold">
+          Começar
+        </button>
+      </div>
+
+      <div class="glass rounded-3xl p-6 border-purple-400 glow">
+        <h3 class="text-xl font-black mb-2">Creator</h3>
+        <p class="text-4xl font-black mb-4">19,90€</p>
+        <p class="text-gray-400 mb-4">100 vídeos por mês</p>
+        <button class="w-full py-3 rounded-xl bg-purple-600 font-bold">
+          Escolher
+        </button>
+      </div>
+
+      <div class="glass rounded-3xl p-6">
+        <h3 class="text-xl font-black mb-2">Pro</h3>
+        <p class="text-4xl font-black mb-4">49,90€</p>
+        <p class="text-gray-400 mb-4">Vídeos ilimitados</p>
+        <button class="w-full py-3 rounded-xl bg-white text-black font-bold">
+          Upgrade
+        </button>
+      </div>
+
+    </section>
+
+  </main>
 
   <script>
-    const SUPABASE_URL = "https://aqwhsygerywuvmtpilsj.supabase.co/rest/v1";
-    const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFxd2hzeWdlcnl3dXZtdHBpbHNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODE1MzIwNTEsImV4cCI6MjA5NzEwODA1MX0.CrMBVFH737uCmj11mGTXjUR7cyFxJ35laxocs31YUNU";
+    const imageInput = document.getElementById("imageInput");
+    const preview = document.getElementById("preview");
+    const previewImg = document.getElementById("previewImg");
 
-    const verdicts = [
-      "INOCENTE",
-      "CULPADA",
-      "CULPADO",
-      "CONDENADO 300 ANOS",
-      "SABIA DEMAIS",
-      "SEM ALMA",
-      "PECADO ORIGINAL",
-      "PERIGOSO",
-      "ABSOLVIDO POR ABSURDO"
-    ];
+    imageInput.addEventListener("change", function () {
+      const file = this.files[0];
+      if (!file) return;
 
-    const motives = [
-      "A cadeira ouviu silêncio suficiente para desconfiar.",
-      "Sabia mais do que devia e fingiu que era decoração.",
-      "Provocou confusão emocional em objetos inocentes.",
-      "Mentiu ao tempo, ao espaço e provavelmente ao tapete.",
-      "Carregava culpa antiga nos cantos invisíveis.",
-      "Tentou parecer normal. Falhou.",
-      "A sua existência levantou demasiadas perguntas.",
-      "Não cometeu crime nenhum. Isso foi precisamente o problema.",
-      "A cadeira não explicou. Apenas decidiu."
-    ];
-
-    let judgments = [];
-
-    function showSection(id, element) {
-      document.querySelectorAll(".section").forEach(function(sec) {
-        sec.classList.remove("active");
-      });
-
-      document.getElementById(id).classList.add("active");
-
-      document.querySelectorAll("nav a").forEach(function(a) {
-        a.classList.remove("active");
-      });
-
-      if (element) {
-        element.classList.add("active");
-      }
-
-      if (id === "ranking") {
-        renderRanking();
-      }
-
-      if (id === "perfil") {
-        renderProfile();
-      }
-    }
-
-    function goToCreate() {
-      const julgarLink = document.querySelectorAll("nav a")[1];
-      showSection("julgar", julgarLink);
-    }
-
-    function getEmoji(category, title) {
-      const t = title.toLowerCase();
-
-      if (t.includes("banana")) return "🍌";
-      if (t.includes("relógio") || t.includes("relogio") || t.includes("tempo")) return "⏰";
-      if (t.includes("meia")) return "🧦";
-      if (t.includes("copo") || t.includes("chávena") || t.includes("chavena") || t.includes("café") || t.includes("cafe")) return "☕";
-      if (t.includes("urso") || t.includes("peluche")) return "🧸";
-      if (t.includes("livro")) return "📖";
-      if (category === "Memória") return "🕯️";
-      if (category === "Filosófico") return "🧠";
-      if (category === "Câmara da Morte") return "💀";
-
-      return "🪑";
-    }
-
-    function escapeHTML(text) {
-      return String(text || "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-    }
-
-    async function loadJudgments() {
-      try {
-        const response = await fetch(SUPABASE_URL + "/judgments?select=*&order=created_at.desc", {
-          method: "GET",
-          headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization": "Bearer " + SUPABASE_KEY
-          }
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Erro Supabase:", errorText);
-          throw new Error("Erro ao carregar julgamentos");
-        }
-
-        judgments = await response.json();
-
-        renderFeed();
-        renderRanking();
-        renderProfile();
-        updateCounter();
-      } catch (error) {
-        console.error(error);
-        document.getElementById("feedList").innerHTML = `
-          <div class="card">
-            <div class="object">⚠️</div>
-            <div>
-              <div class="meta">@Sistema · erro</div>
-              <h3>A cadeira não conseguiu carregar</h3>
-              <p>Confirma se a tabela judgments existe no Supabase e se as policies RLS foram criadas.</p>
-            </div>
-            <div class="verdict">ERRO</div>
-          </div>
-        `;
-        document.getElementById("totalCounter").innerText = "Erro ao carregar julgamentos";
-      }
-    }
-
-    async function createJudgment() {
-      const title = document.getElementById("caseTitle").value.trim();
-      const category = document.getElementById("caseCategory").value;
-      const content = document.getElementById("caseText").value.trim();
-
-      if (!title || !content) {
-        alert("A cadeira exige título e descrição.");
-        return;
-      }
-
-      const verdict = verdicts[Math.floor(Math.random() * verdicts.length)];
-      const motive = motives[Math.floor(Math.random() * motives.length)];
-      const emoji = getEmoji(category, title);
-
-      const newJudgment = {
-        title: title,
-        category: category,
-        content: content,
-        emoji: emoji,
-        verdict: verdict,
-        motive: motive,
-        votes: 0
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        previewImg.src = e.target.result;
+        preview.classList.remove("hidden");
       };
+      reader.readAsDataURL(file);
+    });
 
-      try {
-        const response = await fetch(SUPABASE_URL + "/judgments", {
-          method: "POST",
-          headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization": "Bearer " + SUPABASE_KEY,
-            "Content-Type": "application/json",
-            "Prefer": "return=representation"
-          },
-          body: JSON.stringify(newJudgment)
-        });
+    function generateVideo() {
+      const prompt = document.getElementById("prompt").value.trim();
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Erro Supabase:", errorText);
-          throw new Error("Erro ao criar julgamento");
-        }
-
-        const saved = await response.json();
-        const item = saved[0];
-
-        document.getElementById("result").innerHTML = `
-          <div class="card">
-            <div class="object">${escapeHTML(item.emoji)}</div>
-            <div>
-              <div class="meta">@Observador · agora · ${escapeHTML(item.category)}</div>
-              <h3>${escapeHTML(item.title)}</h3>
-              <p>${escapeHTML(item.content)} ${escapeHTML(item.motive)}</p>
-            </div>
-            <div class="verdict">${escapeHTML(item.verdict)}</div>
-            <div class="actions">
-              <button class="action">Concordo</button>
-              <button class="action">Recurso negado</button>
-              <button class="action">Mandar para o Abismo</button>
-              <button class="action">Partilhar</button>
-            </div>
-          </div>
-        `;
-
-        document.getElementById("caseTitle").value = "";
-        document.getElementById("caseText").value = "";
-
-        await loadJudgments();
-      } catch (error) {
-        console.error(error);
-        alert("A cadeira recusou este julgamento. Verifica a tabela e as permissões no Supabase.");
-      }
-    }
-
-    function renderFeed() {
-      const feed = document.getElementById("feedList");
-
-      if (!judgments.length) {
-        feed.innerHTML = `
-          <div class="card">
-            <div class="object">🪑</div>
-            <div>
-              <div class="meta">@Cadeira · agora</div>
-              <h3>Nenhum julgamento encontrado</h3>
-              <p>O tribunal está vazio. Submete o primeiro caso.</p>
-            </div>
-            <div class="verdict">À ESPERA</div>
-          </div>
-        `;
+      if (!prompt) {
+        alert("Escreve primeiro um prompt para gerar o vídeo.");
         return;
       }
 
-      feed.innerHTML = judgments.map(function(j, index) {
-        return `
-          <div class="card">
-            <div class="object">${escapeHTML(j.emoji || "🪑")}</div>
-            <div>
-              <div class="meta">@Observador · Caso nº ${index + 1} · ${escapeHTML(j.category)}</div>
-              <h3>${escapeHTML(j.title)}</h3>
-              <p>${escapeHTML(j.content)} ${escapeHTML(j.motive || "")}</p>
-            </div>
-            <div class="verdict">${escapeHTML(j.verdict)}</div>
-            <div class="actions">
-              <button class="action" onclick="vote('${j.id}', ${j.votes || 0})">Concordo (${j.votes || 0})</button>
-              <button class="action" onclick="appeal('${j.id}')">Recorrer</button>
-              <button class="action">Mandar para o Abismo</button>
-              <button class="action" onclick="shareJudgment(${index})">Partilhar</button>
-            </div>
-          </div>
-        `;
-      }).join("");
-    }
+      document.getElementById("emptyState").classList.add("hidden");
+      document.getElementById("doneState").classList.add("hidden");
+      document.getElementById("loadingState").classList.remove("hidden");
 
-    function renderRanking() {
-      const ranking = document.getElementById("rankingList");
-      const sorted = [...judgments].sort(function(a, b) {
-        return (b.votes || 0) - (a.votes || 0);
-      });
+      const bar = document.getElementById("bar");
+      bar.style.width = "0%";
 
-      if (!sorted.length) {
-        ranking.innerHTML = `
-          <div class="ranking-card">
-            <p>Ainda não há julgamentos no ranking.</p>
-          </div>
-        `;
-        return;
-      }
+      let progress = 0;
+      const interval = setInterval(() => {
+        progress += 10;
+        bar.style.width = progress + "%";
 
-      ranking.innerHTML = sorted.map(function(j, index) {
-        return `
-          <div class="ranking-card">
-            <div class="ranking-item">
-              <span>${index + 1}. ${escapeHTML(j.emoji || "🪑")} ${escapeHTML(j.title)}</span>
-              <strong>${j.votes || 0}</strong>
-            </div>
-            <p>${escapeHTML(j.verdict)}</p>
-          </div>
-        `;
-      }).join("");
-    }
-
-    function renderProfile() {
-      const profileJudgments = document.getElementById("profileJudgments");
-      if (profileJudgments) {
-        profileJudgments.innerText = judgments.length;
-      }
-    }
-
-    function updateCounter() {
-      const totalCounter = document.getElementById("totalCounter");
-      totalCounter.innerText = judgments.length + " julgamentos realizados";
-    }
-
-    async function vote(id, currentVotes) {
-      try {
-        const response = await fetch(SUPABASE_URL + "/judgments?id=eq." + id, {
-          method: "PATCH",
-          headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization": "Bearer " + SUPABASE_KEY,
-            "Content-Type": "application/json",
-            "Prefer": "return=representation"
-          },
-          body: JSON.stringify({
-            votes: currentVotes + 1
-          })
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Erro Supabase:", errorText);
-          throw new Error("Erro ao votar");
+        if (progress >= 100) {
+          clearInterval(interval);
+          document.getElementById("loadingState").classList.add("hidden");
+          document.getElementById("doneState").classList.remove("hidden");
         }
-
-        await loadJudgments();
-      } catch (error) {
-        console.error(error);
-        alert("A cadeira recusou o teu voto.");
-      }
+      }, 250);
     }
-
-    async function appeal(id) {
-      const newVerdict = verdicts[Math.floor(Math.random() * verdicts.length)];
-      const newMotive = motives[Math.floor(Math.random() * motives.length)];
-
-      try {
-        const response = await fetch(SUPABASE_URL + "/judgments?id=eq." + id, {
-          method: "PATCH",
-          headers: {
-            "apikey": SUPABASE_KEY,
-            "Authorization": "Bearer " + SUPABASE_KEY,
-            "Content-Type": "application/json",
-            "Prefer": "return=representation"
-          },
-          body: JSON.stringify({
-            verdict: newVerdict,
-            motive: "Recurso analisado. " + newMotive
-          })
-        });
-
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error("Erro Supabase:", errorText);
-          throw new Error("Erro ao recorrer");
-        }
-
-        alert("Recurso analisado. A cadeira mudou o veredito.");
-        await loadJudgments();
-      } catch (error) {
-        console.error(error);
-        alert("Recurso negado. A cadeira permaneceu em silêncio.");
-      }
-    }
-
-    function shareJudgment(index) {
-      const j = judgments[index];
-      const text = "O Tribunal da Cadeira julgou: " + j.title + ". Veredito: " + j.verdict + ".";
-
-      if (navigator.share) {
-        navigator.share({
-          title: "Tribunal da Cadeira",
-          text: text
-        });
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(text);
-        alert("Texto copiado para partilhar.");
-      } else {
-        alert(text);
-      }
-    }
-
-    loadJudgments();
   </script>
+
 </body>
 </html>
