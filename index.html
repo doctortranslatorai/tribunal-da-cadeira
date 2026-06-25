@@ -1,250 +1,431 @@
 <!DOCTYPE html>
-<html lang="pt-PT">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VidFlow AI — Vídeos IA de 10 Segundos</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Path Auto</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
 
-  <script src="https://cdn.tailwindcss.com"></script>
+body{
+  background:#02040a;
+  color:white;
+  font-family:Arial,sans-serif;
+  min-height:100vh;
+  overflow:hidden;
+}
 
-  <style>
-    body {
-      background: #070A12;
-      color: white;
-      font-family: Inter, system-ui, sans-serif;
-    }
+.app{
+  width:100vw;
+  height:100vh;
+  max-width:430px;
+  margin:auto;
+  aspect-ratio:9/16;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  padding:18px 12px;
+  background:
+    radial-gradient(circle at top,#18245a,#05070d 55%,#010208);
+}
 
-    .glass {
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.14);
-      backdrop-filter: blur(18px);
-    }
+h1{
+  font-size:36px;
+  color:#7cff6b;
+  text-shadow:0 0 18px #39ff14;
+  margin-top:6px;
+}
 
-    .glow {
-      box-shadow: 0 0 90px rgba(99,102,241,0.45);
-    }
+.sub{
+  color:#00eaff;
+  font-size:13px;
+  margin:6px 0 12px;
+  text-align:center;
+}
 
-    .gradient-text {
-      background: linear-gradient(90deg, #8b5cf6, #22d3ee, #f472b6);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
+.hud{
+  width:100%;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-bottom:12px;
+}
 
-    .video-box {
-      background:
-        radial-gradient(circle at top, rgba(139,92,246,.35), transparent 40%),
-        linear-gradient(135deg, #111827, #020617);
-    }
-  </style>
+.card{
+  border:1px solid #00eaff;
+  padding:8px 5px;
+  border-radius:12px;
+  background:#07111d;
+  box-shadow:0 0 12px #00eaff66;
+  text-align:center;
+  font-size:12px;
+}
+
+.card span{
+  display:block;
+  font-size:22px;
+  color:#ffd400;
+  margin-top:3px;
+}
+
+.objective{
+  width:100%;
+  border:1px solid #2eff71;
+  border-radius:14px;
+  padding:10px;
+  background:#061019;
+  font-size:13px;
+  line-height:1.4;
+  margin-bottom:12px;
+}
+
+.objective b{color:#ffd400}
+.objective .green{color:#39ff14}
+.objective .red{color:#ff3333}
+
+.board{
+  width:100%;
+  max-width:390px;
+  aspect-ratio:1/1;
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-template-rows:repeat(12,1fr);
+  gap:3px;
+  padding:8px;
+  background:#0b0f15;
+  border:2px solid #2eff71;
+  border-radius:18px;
+  box-shadow:0 0 28px #2eff71aa;
+}
+
+.cell{
+  width:100%;
+  height:100%;
+  background:#151b22;
+  border-radius:6px;
+  position:relative;
+  box-shadow:inset 0 0 7px #000;
+}
+
+.wall{background:#333}
+.wall::after{
+  content:"✖";
+  color:#777;
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:14px;
+}
+
+.coin::after{
+  content:"";
+  width:45%;
+  height:45%;
+  background:#ffd400;
+  border-radius:50%;
+  box-shadow:0 0 12px #ffd400;
+  position:absolute;
+  top:27%;
+  left:27%;
+}
+
+.block{
+  background:#5a0808;
+  box-shadow:0 0 10px red;
+}
+
+.exit{
+  background:#3a3200;
+  box-shadow:0 0 14px #ffd400;
+}
+
+.exit::after{
+  content:"★";
+  color:#ffd400;
+  font-size:20px;
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.player{
+  background:#27ff53!important;
+  box-shadow:0 0 22px #27ff53;
+}
+
+.player::after{
+  content:"▶";
+  color:#001b05;
+  font-size:18px;
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.path{
+  background:#103d18;
+  box-shadow:0 0 12px #27ff53 inset;
+}
+
+.panel{
+  width:100%;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-top:12px;
+}
+
+.info{
+  border:1px solid #00eaff;
+  border-radius:12px;
+  padding:9px;
+  background:#061019;
+  font-size:12px;
+  text-align:center;
+}
+
+.info strong{
+  display:block;
+  color:#ffd400;
+  font-size:18px;
+}
+
+button{
+  margin-top:12px;
+  width:100%;
+  padding:12px;
+  border:0;
+  border-radius:14px;
+  background:#27ff53;
+  color:#001b05;
+  font-weight:bold;
+  cursor:pointer;
+  box-shadow:0 0 18px #27ff53;
+}
+
+.footer{
+  margin-top:10px;
+  color:#aaa;
+  font-size:12px;
+  text-align:center;
+}
+</style>
 </head>
 
-<body class="min-h-screen">
+<body>
 
-  <header class="px-6 py-5 flex justify-between items-center">
-    <div class="text-2xl font-black tracking-tight">
-      VidFlow<span class="gradient-text">AI</span>
-    </div>
+<div class="app">
+  <h1>NEON PATH</h1>
+  <div class="sub">Modo automático · observa a IA jogar</div>
 
-    <button class="px-5 py-2 rounded-full bg-white text-black font-bold">
-      Entrar
-    </button>
-  </header>
+  <div class="hud">
+    <div class="card">Nível <span id="level">1</span></div>
+    <div class="card">Esferas <span id="coins">0</span></div>
+    <div class="card">Movimentos <span id="moves">0</span></div>
+  </div>
 
-  <main class="px-6 py-10 max-w-7xl mx-auto">
+  <div class="objective">
+    Objetivo: sair do <span class="green">INÍCIO</span> até à <b>SAÍDA</b>, coletando esferas e evitando <span class="red">obstáculos</span>.
+  </div>
 
-    <section class="text-center mb-14">
-      <div class="inline-flex px-4 py-2 rounded-full glass text-sm mb-6">
-        Vídeos IA curtos, rápidos e virais
-      </div>
+  <div class="board" id="board"></div>
 
-      <h1 class="text-5xl md:text-7xl font-black leading-tight mb-6">
-        Cria vídeos com IA<br>
-        em apenas <span class="gradient-text">10 segundos</span>
-      </h1>
+  <div class="panel">
+    <div class="info">Tempo<strong id="time">00:00</strong></div>
+    <div class="info">Recorde<strong id="record">--</strong></div>
+  </div>
 
-      <p class="text-gray-300 text-lg max-w-2xl mx-auto">
-        Escreve um prompt, envia uma imagem e gera vídeos curtos para TikTok,
-        Reels, anúncios, produtos, ASMR, terror e storytelling.
-      </p>
-    </section>
+  <button onclick="restart()">REINICIAR</button>
 
-    <section class="grid lg:grid-cols-2 gap-8 items-start">
+  <div class="footer">Cada movimento conta. A estratégia é a chave.</div>
+</div>
 
-      <div class="glass rounded-3xl p-6 glow">
+<script>
+const size = 12;
+let level = 1;
+let moves = 0;
+let coinsCollected = 0;
+let player = {x:0,y:0};
+let exit = {x:11,y:11};
+let grid = [];
+let autoTimer;
+let timeTimer;
+let seconds = 0;
+let record = null;
 
-        <h2 class="text-2xl font-black mb-6">Criador de Vídeo</h2>
+function createLevel(){
+  clearInterval(autoTimer);
+  clearInterval(timeTimer);
 
-        <label class="block mb-2 font-semibold">Prompt do vídeo</label>
-        <textarea id="prompt" rows="6"
-          placeholder="Ex: Uma mão gigante hiper-realista esmaga lentamente um cubo de gelo azul, som ASMR intenso, fundo escuro, loop perfeito..."
-          class="w-full rounded-2xl bg-black/40 border border-white/10 p-4 outline-none focus:border-purple-400 mb-5"></textarea>
+  moves = 0;
+  coinsCollected = 0;
+  seconds = 0;
+  player = {x:0,y:0};
+  exit = {x:11,y:11};
 
-        <label class="block mb-2 font-semibold">Enviar imagem</label>
-        <input id="imageInput" type="file" accept="image/*"
-          class="w-full mb-5 text-sm file:mr-4 file:rounded-full file:border-0 file:bg-purple-600 file:px-5 file:py-3 file:text-white file:font-bold" />
+  grid = Array.from({length:size},()=>Array(size).fill("empty"));
 
-        <div id="preview" class="hidden mb-5">
-          <img id="previewImg" class="rounded-2xl max-h-56 w-full object-cover border border-white/10" />
-        </div>
+  grid[0][0] = "player";
+  grid[11][11] = "exit";
 
-        <div class="grid md:grid-cols-2 gap-4 mb-5">
-          <div>
-            <label class="block mb-2 font-semibold">Estilo</label>
-            <select class="w-full rounded-2xl bg-black/40 border border-white/10 p-4">
-              <option>Cinematográfico</option>
-              <option>Viral TikTok</option>
-              <option>Produto Premium</option>
-              <option>ASMR</option>
-              <option>Terror</option>
-              <option>Anime</option>
-              <option>Ultra-realista</option>
-            </select>
-          </div>
+  for(let i=0;i<20;i++){
+    let x = Math.floor(Math.random()*size);
+    let y = Math.floor(Math.random()*size);
+    if(isSafe(x,y)) grid[y][x] = "wall";
+  }
 
-          <div>
-            <label class="block mb-2 font-semibold">Formato</label>
-            <select class="w-full rounded-2xl bg-black/40 border border-white/10 p-4">
-              <option>9:16 Vertical</option>
-              <option>16:9 Horizontal</option>
-              <option>1:1 Quadrado</option>
-            </select>
-          </div>
-        </div>
+  for(let i=0;i<28;i++){
+    let x = Math.floor(Math.random()*size);
+    let y = Math.floor(Math.random()*size);
+    if(grid[y][x] === "empty") grid[y][x] = "coin";
+  }
 
-        <button onclick="generateVideo()"
-          class="w-full py-4 rounded-2xl bg-gradient-to-r from-purple-600 via-pink-500 to-cyan-400 font-black text-lg">
-          Gerar vídeo de 10 segundos
-        </button>
+  for(let i=0;i<7;i++){
+    let x = Math.floor(Math.random()*size);
+    let y = Math.floor(Math.random()*size);
+    if(grid[y][x] === "empty") grid[y][x] = "block";
+  }
 
-      </div>
+  draw();
+  startClock();
+  autoPlay();
+}
 
-      <div class="glass rounded-3xl p-6">
+function isSafe(x,y){
+  if((x===0 && y===0) || (x===11 && y===11)) return false;
+  if(x<2 && y<2) return false;
+  if(x>9 && y>9) return false;
+  return grid[y][x] === "empty";
+}
 
-        <h2 class="text-2xl font-black mb-6">Resultado</h2>
+function draw(){
+  const board = document.getElementById("board");
+  board.innerHTML = "";
 
-        <div class="video-box rounded-3xl h-[520px] flex flex-col items-center justify-center text-center p-6 border border-white/10">
+  for(let y=0;y<size;y++){
+    for(let x=0;x<size;x++){
+      const cell = document.createElement("div");
+      cell.className = "cell";
 
-          <div id="emptyState">
-            <div class="text-6xl mb-4">🎬</div>
-            <h3 class="text-2xl font-black mb-2">O teu vídeo aparece aqui</h3>
-            <p class="text-gray-400">
-              Geração limitada a 10 segundos.
-            </p>
-          </div>
+      if(grid[y][x] === "wall") cell.classList.add("wall");
+      if(grid[y][x] === "coin") cell.classList.add("coin");
+      if(grid[y][x] === "block") cell.classList.add("block");
+      if(grid[y][x] === "exit") cell.classList.add("exit");
+      if(grid[y][x] === "path") cell.classList.add("path");
+      if(player.x === x && player.y === y) cell.classList.add("player");
 
-          <div id="loadingState" class="hidden">
-            <div class="text-5xl mb-4 animate-pulse">⚡</div>
-            <h3 class="text-2xl font-black mb-2">A gerar vídeo...</h3>
-            <p class="text-gray-400 mb-4">Criando 10 segundos com IA</p>
-            <div class="w-64 h-3 bg-white/10 rounded-full overflow-hidden">
-              <div id="bar" class="h-full bg-purple-500 w-0"></div>
-            </div>
-          </div>
-
-          <div id="doneState" class="hidden">
-            <div class="text-6xl mb-4">✅</div>
-            <h3 class="text-2xl font-black mb-2">Vídeo pronto</h3>
-            <p class="text-gray-400 mb-6">
-              Pré-visualização simulada de vídeo IA com 10 segundos.
-            </p>
-
-            <div class="flex gap-3 justify-center flex-wrap">
-              <button class="px-5 py-3 rounded-full bg-white text-black font-bold">
-                Download
-              </button>
-              <button class="px-5 py-3 rounded-full glass font-bold">
-                Regerar
-              </button>
-              <button class="px-5 py-3 rounded-full glass font-bold">
-                Copiar Prompt
-              </button>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <section class="grid md:grid-cols-3 gap-6 mt-12">
-
-      <div class="glass rounded-3xl p-6">
-        <h3 class="text-xl font-black mb-2">Free</h3>
-        <p class="text-4xl font-black mb-4">0€</p>
-        <p class="text-gray-400 mb-4">3 vídeos grátis</p>
-        <button class="w-full py-3 rounded-xl bg-white text-black font-bold">
-          Começar
-        </button>
-      </div>
-
-      <div class="glass rounded-3xl p-6 border-purple-400 glow">
-        <h3 class="text-xl font-black mb-2">Creator</h3>
-        <p class="text-4xl font-black mb-4">19,90€</p>
-        <p class="text-gray-400 mb-4">100 vídeos por mês</p>
-        <button class="w-full py-3 rounded-xl bg-purple-600 font-bold">
-          Escolher
-        </button>
-      </div>
-
-      <div class="glass rounded-3xl p-6">
-        <h3 class="text-xl font-black mb-2">Pro</h3>
-        <p class="text-4xl font-black mb-4">49,90€</p>
-        <p class="text-gray-400 mb-4">Vídeos ilimitados</p>
-        <button class="w-full py-3 rounded-xl bg-white text-black font-bold">
-          Upgrade
-        </button>
-      </div>
-
-    </section>
-
-  </main>
-
-  <script>
-    const imageInput = document.getElementById("imageInput");
-    const preview = document.getElementById("preview");
-    const previewImg = document.getElementById("previewImg");
-
-    imageInput.addEventListener("change", function () {
-      const file = this.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function (e) {
-        previewImg.src = e.target.result;
-        preview.classList.remove("hidden");
-      };
-      reader.readAsDataURL(file);
-    });
-
-    function generateVideo() {
-      const prompt = document.getElementById("prompt").value.trim();
-
-      if (!prompt) {
-        alert("Escreve primeiro um prompt para gerar o vídeo.");
-        return;
-      }
-
-      document.getElementById("emptyState").classList.add("hidden");
-      document.getElementById("doneState").classList.add("hidden");
-      document.getElementById("loadingState").classList.remove("hidden");
-
-      const bar = document.getElementById("bar");
-      bar.style.width = "0%";
-
-      let progress = 0;
-      const interval = setInterval(() => {
-        progress += 10;
-        bar.style.width = progress + "%";
-
-        if (progress >= 100) {
-          clearInterval(interval);
-          document.getElementById("loadingState").classList.add("hidden");
-          document.getElementById("doneState").classList.remove("hidden");
-        }
-      }, 250);
+      board.appendChild(cell);
     }
-  </script>
+  }
+
+  document.getElementById("level").textContent = level;
+  document.getElementById("coins").textContent = coinsCollected;
+  document.getElementById("moves").textContent = moves;
+  document.getElementById("record").textContent = record ? record + " mov." : "--";
+}
+
+function findBestMove(){
+  const dirs = [
+    {x:1,y:0},
+    {x:0,y:1},
+    {x:-1,y:0},
+    {x:0,y:-1}
+  ];
+
+  let best = null;
+  let bestScore = 9999;
+
+  for(const d of dirs){
+    let nx = player.x + d.x;
+    let ny = player.y + d.y;
+
+    if(nx<0 || ny<0 || nx>=size || ny>=size) continue;
+    if(grid[ny][nx] === "wall" || grid[ny][nx] === "block") continue;
+
+    let score = Math.abs(exit.x-nx) + Math.abs(exit.y-ny);
+
+    if(grid[ny][nx] === "coin") score -= 6;
+    if(grid[ny][nx] === "path") score += 3;
+
+    if(score < bestScore){
+      bestScore = score;
+      best = {x:nx,y:ny};
+    }
+  }
+
+  return best;
+}
+
+function step(){
+  const move = findBestMove();
+
+  if(!move){
+    clearInterval(autoTimer);
+    setTimeout(createLevel,700);
+    return;
+  }
+
+  if(grid[move.y][move.x] === "coin"){
+    coinsCollected++;
+  }
+
+  if(!(player.x === 0 && player.y === 0)){
+    grid[player.y][player.x] = "path";
+  }
+
+  player = move;
+  moves++;
+
+  if(player.x === exit.x && player.y === exit.y){
+    clearInterval(autoTimer);
+    clearInterval(timeTimer);
+
+    if(record === null || moves < record){
+      record = moves;
+    }
+
+    setTimeout(()=>{
+      level++;
+      createLevel();
+    },1000);
+  }
+
+  draw();
+}
+
+function autoPlay(){
+  autoTimer = setInterval(step,260);
+}
+
+function startClock(){
+  updateClock();
+  timeTimer = setInterval(()=>{
+    seconds++;
+    updateClock();
+  },1000);
+}
+
+function updateClock(){
+  let m = String(Math.floor(seconds/60)).padStart(2,"0");
+  let s = String(seconds%60).padStart(2,"0");
+  document.getElementById("time").textContent = `${m}:${s}`;
+}
+
+function restart(){
+  level = 1;
+  record = null;
+  createLevel();
+}
+
+createLevel();
+</script>
 
 </body>
 </html>
