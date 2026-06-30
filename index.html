@@ -1,431 +1,277 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-PT">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Neon Path Auto</title>
-<style>
-*{box-sizing:border-box;margin:0;padding:0}
-
-body{
-  background:#02040a;
-  color:white;
-  font-family:Arial,sans-serif;
-  min-height:100vh;
-  overflow:hidden;
-}
-
-.app{
-  width:100vw;
-  height:100vh;
-  max-width:430px;
-  margin:auto;
-  aspect-ratio:9/16;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:flex-start;
-  padding:18px 12px;
-  background:
-    radial-gradient(circle at top,#18245a,#05070d 55%,#010208);
-}
-
-h1{
-  font-size:36px;
-  color:#7cff6b;
-  text-shadow:0 0 18px #39ff14;
-  margin-top:6px;
-}
-
-.sub{
-  color:#00eaff;
-  font-size:13px;
-  margin:6px 0 12px;
-  text-align:center;
-}
-
-.hud{
-  width:100%;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:8px;
-  margin-bottom:12px;
-}
-
-.card{
-  border:1px solid #00eaff;
-  padding:8px 5px;
-  border-radius:12px;
-  background:#07111d;
-  box-shadow:0 0 12px #00eaff66;
-  text-align:center;
-  font-size:12px;
-}
-
-.card span{
-  display:block;
-  font-size:22px;
-  color:#ffd400;
-  margin-top:3px;
-}
-
-.objective{
-  width:100%;
-  border:1px solid #2eff71;
-  border-radius:14px;
-  padding:10px;
-  background:#061019;
-  font-size:13px;
-  line-height:1.4;
-  margin-bottom:12px;
-}
-
-.objective b{color:#ffd400}
-.objective .green{color:#39ff14}
-.objective .red{color:#ff3333}
-
-.board{
-  width:100%;
-  max-width:390px;
-  aspect-ratio:1/1;
-  display:grid;
-  grid-template-columns:repeat(12,1fr);
-  grid-template-rows:repeat(12,1fr);
-  gap:3px;
-  padding:8px;
-  background:#0b0f15;
-  border:2px solid #2eff71;
-  border-radius:18px;
-  box-shadow:0 0 28px #2eff71aa;
-}
-
-.cell{
-  width:100%;
-  height:100%;
-  background:#151b22;
-  border-radius:6px;
-  position:relative;
-  box-shadow:inset 0 0 7px #000;
-}
-
-.wall{background:#333}
-.wall::after{
-  content:"✖";
-  color:#777;
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:14px;
-}
-
-.coin::after{
-  content:"";
-  width:45%;
-  height:45%;
-  background:#ffd400;
-  border-radius:50%;
-  box-shadow:0 0 12px #ffd400;
-  position:absolute;
-  top:27%;
-  left:27%;
-}
-
-.block{
-  background:#5a0808;
-  box-shadow:0 0 10px red;
-}
-
-.exit{
-  background:#3a3200;
-  box-shadow:0 0 14px #ffd400;
-}
-
-.exit::after{
-  content:"★";
-  color:#ffd400;
-  font-size:20px;
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.player{
-  background:#27ff53!important;
-  box-shadow:0 0 22px #27ff53;
-}
-
-.player::after{
-  content:"▶";
-  color:#001b05;
-  font-size:18px;
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.path{
-  background:#103d18;
-  box-shadow:0 0 12px #27ff53 inset;
-}
-
-.panel{
-  width:100%;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:8px;
-  margin-top:12px;
-}
-
-.info{
-  border:1px solid #00eaff;
-  border-radius:12px;
-  padding:9px;
-  background:#061019;
-  font-size:12px;
-  text-align:center;
-}
-
-.info strong{
-  display:block;
-  color:#ffd400;
-  font-size:18px;
-}
-
-button{
-  margin-top:12px;
-  width:100%;
-  padding:12px;
-  border:0;
-  border-radius:14px;
-  background:#27ff53;
-  color:#001b05;
-  font-weight:bold;
-  cursor:pointer;
-  box-shadow:0 0 18px #27ff53;
-}
-
-.footer{
-  margin-top:10px;
-  color:#aaa;
-  font-size:12px;
-  text-align:center;
-}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LIVEARENA - Desafios e Batalhas LIVE</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      margin: 0;
+      background: #050711;
+      color: white;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+    .glass {
+      background: rgba(18, 20, 38, 0.82);
+      border: 1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(16px);
+    }
+    .neon {
+      box-shadow: 0 0 25px rgba(255, 0, 140, .45);
+    }
+    .btn {
+      background: linear-gradient(135deg,#ff006e,#7b2cff);
+    }
+    .bar-left {
+      background: linear-gradient(90deg,#ff006e,#ff4d9d);
+    }
+    .bar-right {
+      background: linear-gradient(90deg,#0077ff,#00d4ff);
+    }
+  </style>
 </head>
 
 <body>
+  <div class="grid grid-cols-[260px_1fr_360px] h-screen">
 
-<div class="app">
-  <h1>NEON PATH</h1>
-  <div class="sub">Modo automático · observa a IA jogar</div>
+    <!-- SIDEBAR -->
+    <aside class="glass p-5 flex flex-col gap-5">
+      <h1 class="text-3xl font-black">
+        ⚡ LIVE<span class="text-pink-500">ARENA</span>
+      </h1>
+      <p class="text-xs text-gray-400">Vive. Compete. Conecta.</p>
 
-  <div class="hud">
-    <div class="card">Nível <span id="level">1</span></div>
-    <div class="card">Esferas <span id="coins">0</span></div>
-    <div class="card">Movimentos <span id="moves">0</span></div>
+      <nav class="space-y-3 text-lg">
+        <div class="btn p-3 rounded-xl font-bold">🏠 Home</div>
+        <div class="p-3 rounded-xl hover:bg-white/10">🔴 Explorar Lives</div>
+        <div class="p-3 rounded-xl hover:bg-white/10">⚔️ Arena PK</div>
+        <div class="p-3 rounded-xl hover:bg-white/10">🎯 Desafios</div>
+        <div class="p-3 rounded-xl hover:bg-white/10">🏆 Ranking</div>
+        <div class="p-3 rounded-xl hover:bg-white/10">🎁 Loja</div>
+        <div class="p-3 rounded-xl hover:bg-white/10">💰 Carteira</div>
+        <div class="p-3 rounded-xl hover:bg-white/10">👤 Perfil</div>
+      </nav>
+
+      <button class="btn mt-auto p-4 rounded-xl font-bold text-lg">
+        📡 Transmitir LIVE
+      </button>
+
+      <div class="glass rounded-xl p-4">
+        <h3 class="font-bold">ERNESTO TOMATE 🍅</h3>
+        <p class="text-sm text-gray-400">Nível 28</p>
+        <div class="w-full bg-gray-700 h-2 rounded mt-3">
+          <div class="btn h-2 rounded" style="width:72%"></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- MAIN -->
+    <main class="p-5 overflow-y-auto">
+
+      <!-- TOP -->
+      <header class="flex justify-between items-center mb-5">
+        <div>
+          <h2 class="text-xl font-bold">Mel Magna 🔵 <span class="bg-pink-600 px-2 py-1 rounded text-xs">LIVE</span></h2>
+          <p class="text-gray-400 text-sm">12.8K seguidores</p>
+        </div>
+        <div class="flex gap-3">
+          <span class="glass px-4 py-2 rounded-full">🎵 Música</span>
+          <span class="glass px-4 py-2 rounded-full">👁️ 1.2K</span>
+          <span class="glass px-4 py-2 rounded-full">💰 1,250</span>
+        </div>
+      </header>
+
+      <!-- LIVE BATTLE -->
+      <section class="glass rounded-2xl p-4 neon">
+        <div class="grid grid-cols-2 gap-1 relative">
+
+          <div class="absolute top-0 left-0 right-0 z-10 flex h-12 rounded-xl overflow-hidden">
+            <div class="bar-left flex items-center pl-5 font-black text-2xl w-[57%]">12,560</div>
+            <div class="bar-right flex items-center justify-end pr-5 font-black text-2xl w-[43%]">9,340</div>
+          </div>
+
+          <div class="absolute top-10 left-1/2 -translate-x-1/2 bg-black/80 px-8 py-3 rounded-b-2xl z-20 text-center">
+            <div class="text-4xl font-black">VS</div>
+            <div id="battleTimer" class="font-bold">03:00</div>
+            <div class="text-xs text-gray-400">Ronda 2 de 3</div>
+          </div>
+
+          <div class="h-[520px] bg-gradient-to-br from-pink-700/40 to-black rounded-l-xl flex items-end p-5">
+            <div class="glass p-4 rounded-xl">
+              <h3 class="font-bold text-xl">Mel Magna</h3>
+              <p>🎁 12.5K</p>
+            </div>
+          </div>
+
+          <div class="h-[520px] bg-gradient-to-br from-blue-700/40 to-black rounded-r-xl flex items-end justify-end p-5">
+            <div class="glass p-4 rounded-xl">
+              <h3 class="font-bold text-xl">Amanda</h3>
+              <p>🎁 9.3K</p>
+            </div>
+          </div>
+
+          <div class="absolute bottom-10 left-1/2 -translate-x-1/2 glass p-6 rounded-2xl text-center w-80 neon">
+            <span class="text-xs bg-yellow-500 text-black px-3 py-1 rounded-full font-bold">DESAFIO ATIVO</span>
+            <h2 class="text-xl font-black mt-3">Careta Mais Engraçada 🤪</h2>
+            <p class="text-sm text-gray-300">O público decide com presentes ou votos.</p>
+            <div class="mt-4 bg-gray-700 h-2 rounded">
+              <div id="challengeBar" class="btn h-2 rounded" style="width:100%"></div>
+            </div>
+            <p id="challengeTime" class="mt-2 text-sm">20s restantes</p>
+          </div>
+        </div>
+
+        <!-- GIFTS -->
+        <div class="grid grid-cols-8 gap-3 mt-4">
+          <button onclick="sendGift('Rosa',1)" class="glass p-3 rounded-xl">🌹<br>Rosa<br><small>1</small></button>
+          <button onclick="sendGift('Coração',1)" class="glass p-3 rounded-xl">❤️<br>Coração<br><small>1</small></button>
+          <button onclick="sendGift('Estrela',10)" class="glass p-3 rounded-xl">⭐<br>Estrela<br><small>10</small></button>
+          <button onclick="sendGift('Galáxia',1000)" class="glass p-3 rounded-xl">🌌<br>Galáxia<br><small>1000</small></button>
+          <button onclick="sendGift('Leão',299)" class="glass p-3 rounded-xl">🦁<br>Leão<br><small>299</small></button>
+          <button onclick="sendGift('Foguete',2999)" class="glass p-3 rounded-xl">🚀<br>Foguete<br><small>2999</small></button>
+          <button class="glass p-3 rounded-xl">🎁<br>Mais</button>
+          <button class="btn p-3 rounded-xl font-bold">💰<br>Recarregar</button>
+        </div>
+      </section>
+
+      <!-- CHALLENGES -->
+      <section class="glass rounded-2xl p-5 mt-5">
+        <h2 class="text-2xl font-black mb-4">🎯 Desafios da Arena</h2>
+        <div class="grid grid-cols-5 gap-4">
+          <div class="glass p-4 rounded-xl text-center">
+            <div class="text-4xl">😂</div>
+            <h3 class="font-bold">Não Rias</h3>
+            <p class="text-sm text-gray-400">Fica sério!</p>
+          </div>
+          <div class="glass p-4 rounded-xl text-center">
+            <div class="text-4xl">😍</div>
+            <h3 class="font-bold">Emoji Challenge</h3>
+            <p class="text-sm text-gray-400">Imita o emoji.</p>
+          </div>
+          <div class="glass p-4 rounded-xl text-center">
+            <div class="text-4xl">🎵</div>
+            <h3 class="font-bold">Adivinha a Música</h3>
+            <p class="text-sm text-gray-400">Qual é a música?</p>
+          </div>
+          <div class="glass p-4 rounded-xl text-center">
+            <div class="text-4xl">🎭</div>
+            <h3 class="font-bold">Mímica</h3>
+            <p class="text-sm text-gray-400">Sem falar.</p>
+          </div>
+          <div class="glass p-4 rounded-xl text-center">
+            <div class="text-4xl">⚡</div>
+            <h3 class="font-bold">Pergunta Relâmpago</h3>
+            <p class="text-sm text-gray-400">Responde rápido.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- RIGHT PANEL -->
+    <aside class="p-5 space-y-5 overflow-y-auto">
+
+      <section class="glass rounded-2xl p-5">
+        <h2 class="font-black text-xl mb-4">🏆 Top Espectadores</h2>
+        <div class="space-y-4">
+          <p>🥇 Lucio Costa <span class="float-right">33,450</span></p>
+          <p>🥈 ERNESTO TOMATE 🍅 <span class="float-right">15,200</span></p>
+          <p>🥉 Misbelis L Diogo <span class="float-right">8,900</span></p>
+        </div>
+      </section>
+
+      <section class="glass rounded-2xl p-5 h-[430px] flex flex-col">
+        <h2 class="font-black text-xl mb-4">💬 Chat ao vivo</h2>
+        <div id="chat" class="flex-1 space-y-3 overflow-y-auto text-sm">
+          <p><b>Live Arena:</b> Bem-vindos à LIVE!</p>
+          <p><b>Misbelis:</b> Que voz incrível! 👏</p>
+          <p><b>ERNESTO TOMATE 🍅:</b> manda muito bemmm 🔥</p>
+        </div>
+        <div class="flex mt-4 gap-2">
+          <input id="chatInput" class="flex-1 bg-black/40 rounded-xl px-4 py-3 outline-none" placeholder="Escreve uma mensagem..." />
+          <button onclick="sendMessage()" class="btn px-4 rounded-xl">Enviar</button>
+        </div>
+      </section>
+
+      <section class="glass rounded-2xl p-5">
+        <h2 class="font-black text-xl">🎁 Metas da LIVE</h2>
+        <p class="text-sm text-gray-400 mt-2">Bater a meta de presentes</p>
+        <div class="w-full bg-gray-700 h-3 rounded mt-3">
+          <div class="btn h-3 rounded" style="width:75%"></div>
+        </div>
+        <p class="text-right text-sm mt-1">75%</p>
+      </section>
+
+    </aside>
   </div>
 
-  <div class="objective">
-    Objetivo: sair do <span class="green">INÍCIO</span> até à <b>SAÍDA</b>, coletando esferas e evitando <span class="red">obstáculos</span>.
-  </div>
+  <script>
+    let challengeSeconds = 20;
+    let battleSeconds = 180;
 
-  <div class="board" id="board"></div>
-
-  <div class="panel">
-    <div class="info">Tempo<strong id="time">00:00</strong></div>
-    <div class="info">Recorde<strong id="record">--</strong></div>
-  </div>
-
-  <button onclick="restart()">REINICIAR</button>
-
-  <div class="footer">Cada movimento conta. A estratégia é a chave.</div>
-</div>
-
-<script>
-const size = 12;
-let level = 1;
-let moves = 0;
-let coinsCollected = 0;
-let player = {x:0,y:0};
-let exit = {x:11,y:11};
-let grid = [];
-let autoTimer;
-let timeTimer;
-let seconds = 0;
-let record = null;
-
-function createLevel(){
-  clearInterval(autoTimer);
-  clearInterval(timeTimer);
-
-  moves = 0;
-  coinsCollected = 0;
-  seconds = 0;
-  player = {x:0,y:0};
-  exit = {x:11,y:11};
-
-  grid = Array.from({length:size},()=>Array(size).fill("empty"));
-
-  grid[0][0] = "player";
-  grid[11][11] = "exit";
-
-  for(let i=0;i<20;i++){
-    let x = Math.floor(Math.random()*size);
-    let y = Math.floor(Math.random()*size);
-    if(isSafe(x,y)) grid[y][x] = "wall";
-  }
-
-  for(let i=0;i<28;i++){
-    let x = Math.floor(Math.random()*size);
-    let y = Math.floor(Math.random()*size);
-    if(grid[y][x] === "empty") grid[y][x] = "coin";
-  }
-
-  for(let i=0;i<7;i++){
-    let x = Math.floor(Math.random()*size);
-    let y = Math.floor(Math.random()*size);
-    if(grid[y][x] === "empty") grid[y][x] = "block";
-  }
-
-  draw();
-  startClock();
-  autoPlay();
-}
-
-function isSafe(x,y){
-  if((x===0 && y===0) || (x===11 && y===11)) return false;
-  if(x<2 && y<2) return false;
-  if(x>9 && y>9) return false;
-  return grid[y][x] === "empty";
-}
-
-function draw(){
-  const board = document.getElementById("board");
-  board.innerHTML = "";
-
-  for(let y=0;y<size;y++){
-    for(let x=0;x<size;x++){
-      const cell = document.createElement("div");
-      cell.className = "cell";
-
-      if(grid[y][x] === "wall") cell.classList.add("wall");
-      if(grid[y][x] === "coin") cell.classList.add("coin");
-      if(grid[y][x] === "block") cell.classList.add("block");
-      if(grid[y][x] === "exit") cell.classList.add("exit");
-      if(grid[y][x] === "path") cell.classList.add("path");
-      if(player.x === x && player.y === y) cell.classList.add("player");
-
-      board.appendChild(cell);
-    }
-  }
-
-  document.getElementById("level").textContent = level;
-  document.getElementById("coins").textContent = coinsCollected;
-  document.getElementById("moves").textContent = moves;
-  document.getElementById("record").textContent = record ? record + " mov." : "--";
-}
-
-function findBestMove(){
-  const dirs = [
-    {x:1,y:0},
-    {x:0,y:1},
-    {x:-1,y:0},
-    {x:0,y:-1}
-  ];
-
-  let best = null;
-  let bestScore = 9999;
-
-  for(const d of dirs){
-    let nx = player.x + d.x;
-    let ny = player.y + d.y;
-
-    if(nx<0 || ny<0 || nx>=size || ny>=size) continue;
-    if(grid[ny][nx] === "wall" || grid[ny][nx] === "block") continue;
-
-    let score = Math.abs(exit.x-nx) + Math.abs(exit.y-ny);
-
-    if(grid[ny][nx] === "coin") score -= 6;
-    if(grid[ny][nx] === "path") score += 3;
-
-    if(score < bestScore){
-      bestScore = score;
-      best = {x:nx,y:ny};
-    }
-  }
-
-  return best;
-}
-
-function step(){
-  const move = findBestMove();
-
-  if(!move){
-    clearInterval(autoTimer);
-    setTimeout(createLevel,700);
-    return;
-  }
-
-  if(grid[move.y][move.x] === "coin"){
-    coinsCollected++;
-  }
-
-  if(!(player.x === 0 && player.y === 0)){
-    grid[player.y][player.x] = "path";
-  }
-
-  player = move;
-  moves++;
-
-  if(player.x === exit.x && player.y === exit.y){
-    clearInterval(autoTimer);
-    clearInterval(timeTimer);
-
-    if(record === null || moves < record){
-      record = moves;
+    function formatTime(sec) {
+      const m = String(Math.floor(sec / 60)).padStart(2, '0');
+      const s = String(sec % 60).padStart(2, '0');
+      return `${m}:${s}`;
     }
 
-    setTimeout(()=>{
-      level++;
-      createLevel();
-    },1000);
-  }
+    setInterval(() => {
+      if (battleSeconds > 0) battleSeconds--;
+      document.getElementById("battleTimer").textContent = formatTime(battleSeconds);
+    }, 1000);
 
-  draw();
-}
+    setInterval(() => {
+      if (challengeSeconds > 0) {
+        challengeSeconds--;
+        document.getElementById("challengeTime").textContent = challengeSeconds + "s restantes";
+        document.getElementById("challengeBar").style.width = (challengeSeconds * 5) + "%";
+      } else {
+        challengeSeconds = 20;
+        const desafios = [
+          "Careta Mais Engraçada 🤪",
+          "Quem Canta Melhor? 🎤",
+          "Emoji Challenge 😍",
+          "Pergunta Relâmpago ⚡",
+          "Não Rias 😂"
+        ];
+        document.querySelector(".absolute.bottom-10 h2").textContent =
+          desafios[Math.floor(Math.random() * desafios.length)];
+      }
+    }, 1000);
 
-function autoPlay(){
-  autoTimer = setInterval(step,260);
-}
+    function sendGift(name, coins) {
+      addChat("ERNESTO TOMATE 🍅", `enviou ${name} 🎁 +${coins}`);
+    }
 
-function startClock(){
-  updateClock();
-  timeTimer = setInterval(()=>{
-    seconds++;
-    updateClock();
-  },1000);
-}
+    function sendMessage() {
+      const input = document.getElementById("chatInput");
+      if (!input.value.trim()) return;
+      addChat("Tu", input.value);
+      input.value = "";
+    }
 
-function updateClock(){
-  let m = String(Math.floor(seconds/60)).padStart(2,"0");
-  let s = String(seconds%60).padStart(2,"0");
-  document.getElementById("time").textContent = `${m}:${s}`;
-}
+    function addChat(user, msg) {
+      const chat = document.getElementById("chat");
+      const p = document.createElement("p");
+      p.innerHTML = `<b>${user}:</b> ${msg}`;
+      chat.appendChild(p);
+      chat.scrollTop = chat.scrollHeight;
+    }
 
-function restart(){
-  level = 1;
-  record = null;
-  createLevel();
-}
+    const autoMessages = [
+      ["Lucio Costa", "Mel é a melhor! ❤️"],
+      ["Sofia Martins", "adoro este desafio 😂"],
+      ["Carlos Silva", "manda galáxiaaa 🌌"],
+      ["Amanda Fan", "vamos Amanda 🔥"],
+      ["Live Arena", "Novo desafio começa em breve!"]
+    ];
 
-createLevel();
-</script>
-
+    setInterval(() => {
+      const item = autoMessages[Math.floor(Math.random() * autoMessages.length)];
+      addChat(item[0], item[1]);
+    }, 4000);
+  </script>
 </body>
 </html>
