@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LIVEARENA - Sala LIVE</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <aside class="sidebar glass">
+      <div class="logo">⚡ LIVE<span>ARENA</span></div>
+      <p style="color:var(--muted);font-size:13px;">Vive. Compete. Conecta.</p>
+
+      <div class="nav-item active">🔴 LIVE Atual</div>
+      <div class="nav-item">🏠 Home</div>
+      <div class="nav-item">⚔️ Arena PK</div>
+      <div class="nav-item">🎯 Desafios</div>
+      <div class="nav-item">🏆 Ranking</div>
+      <div class="nav-item">🎁 Loja</div>
+      <div class="nav-item">💰 Carteira</div>
+      <div class="nav-item">👤 Perfil</div>
+
+      <button class="btn" style="margin-top:auto;">📡 Transmitir LIVE</button>
+    </aside>
+
+    <main class="main">
+
+      <header style="display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;">
+        <div>
+          <h1 style="margin:0;">Mel Magna vs Amanda</h1>
+          <p style="color:var(--muted);margin-top:6px;">Arena Battle • Ao vivo</p>
+        </div>
+
+        <div style="display:flex;gap:10px;">
+          <span class="glass" style="padding:10px 14px;border-radius:999px;">👁️ 1.2K</span>
+          <span class="glass" style="padding:10px 14px;border-radius:999px;">🎵 Música</span>
+          <span class="glass" style="padding:10px 14px;border-radius:999px;">💰 1.250</span>
+        </div>
+      </header>
+
+      <section class="live-card">
+
+        <div class="battle-bar">
+          <div id="scoreLeft" class="battle-left" style="width:57%;">12.5K</div>
+          <div id="scoreRight" class="battle-right" style="width:43%;">9.3K</div>
+        </div>
+
+        <div class="vs-badge">
+          <strong style="font-size:30px;">VS</strong>
+          <div id="battleTimer">03:00</div>
+          <small style="color:var(--muted);">Ronda 2 de 3</small>
+        </div>
+
+        <div class="battle-grid">
+          <div class="creator-left"></div>
+          <div class="creator-right"></div>
+        </div>
+
+        <div class="creator-info left">
+          <h2 style="margin:0;">Mel Magna</h2>
+          <p style="margin:4px 0;color:var(--muted);">🎁 12.5K • 🔥 Nível 34</p>
+        </div>
+
+        <div class="creator-info right">
+          <h2 style="margin:0;">Amanda</h2>
+          <p style="margin:4px 0;color:var(--muted);">🎁 9.3K • 💎 Nível 29</p>
+        </div>
+
+        <div class="challenge-box pulse-neon">
+          <span class="challenge-label">DESAFIO ATIVO</span>
+          <h2 id="challengeTitle">Careta Mais Engraçada 🤪</h2>
+          <p style="color:var(--muted);font-size:14px;">
+            O público vota com presentes e corações.
+          </p>
+
+          <div class="progress">
+            <div id="challengeBar" class="progress-fill" style="width:100%;"></div>
+          </div>
+
+          <p id="challengeTime" style="font-size:13px;color:var(--muted);">20s restantes</p>
+        </div>
+
+      </section>
+
+      <section class="gift-grid">
+        <button onclick="sendGift('Rosa',1)" class="gift">🌹<br><b>Rosa</b><br><small>1</small></button>
+        <button onclick="sendGift('Coração',1)" class="gift">❤️<br><b>Coração</b><br><small>1</small></button>
+        <button onclick="sendGift('Estrela',10)" class="gift">⭐<br><b>Estrela</b><br><small>10</small></button>
+        <button onclick="sendGift('Tomate',99)" class="gift">🍅<br><b>Tomate</b><br><small>99</small></button>
+        <button onclick="sendGift('Leão',299)" class="gift">🦁<br><b>Leão</b><br><small>299</small></button>
+        <button onclick="sendGift('Galáxia',1000)" class="gift">🌌<br><b>Galáxia</b><br><small>1000</small></button>
+        <button onclick="sendGift('Foguete',2999)" class="gift">🚀<br><b>Foguete</b><br><small>2999</small></button>
+        <button class="btn">💰 Recarregar</button>
+      </section>
+
+    </main>
+
+    <aside class="right-panel">
+
+      <section class="card">
+        <h2>🏆 Top Espectadores</h2>
+
+        <div class="ranking-item">
+          <span>🥇 Lucio Costa</span>
+          <b>33.450</b>
+        </div>
+
+        <div class="ranking-item">
+          <span>🥈 ERNESTO TOMATE 🍅</span>
+          <b>15.200</b>
+        </div>
+
+        <div class="ranking-item">
+          <span>🥉 Misbelis L Diogo</span>
+          <b>8.900</b>
+        </div>
+      </section>
+
+      <section class="card chat-box" style="margin-top:22px;">
+        <h2>💬 Chat ao vivo</h2>
+
+        <div id="chat" class="chat-list">
+          <p class="chat-message"><b>LIVEARENA:</b> Bem-vindos à batalha!</p>
+          <p class="chat-message"><b>Misbelis:</b> Que energia incrível 👏</p>
+          <p class="chat-message"><b>ERNESTO TOMATE 🍅:</b> vamossss 🔥</p>
+        </div>
+
+        <div class="chat-input">
+          <input id="chatInput" placeholder="Escreve..." />
+          <button onclick="sendMessage()" class="btn">Enviar</button>
+        </div>
+      </section>
+
+      <section class="card" style="margin-top:22px;">
+        <h2>🔥 Energia da LIVE</h2>
+
+        <div class="ranking-item">
+          <span>Humor</span>
+          <b>91%</b>
+        </div>
+
+        <div class="ranking-item">
+          <span>Interação</span>
+          <b>84%</b>
+        </div>
+
+        <div class="ranking-item">
+          <span>Presentes</span>
+          <b>76%</b>
+        </div>
+      </section>
+
+    </aside>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
